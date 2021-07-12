@@ -23,7 +23,7 @@ paths:
         required: true
         description: Unique ID
     get:
-      summary: Get Classification Info by ID
+      summary: Get Classification by ID
       tags: []
       responses:
         '200':
@@ -59,7 +59,7 @@ paths:
       parameters: []
   /classifications:
     get:
-      summary: ''
+      summary: Get Classifications
       tags: []
       operationId: get-classifications
       responses:
@@ -96,7 +96,7 @@ paths:
     parameters: []
   /sequentialprefixes:
     get:
-      summary: Your GET endpoint
+      summary: Get Sequential Prefixes
       tags: []
       responses:
         '200':
