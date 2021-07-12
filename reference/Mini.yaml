@@ -1,0 +1,364 @@
+swagger: '2.0'
+info:
+  title: Mini
+  version: '1.0'
+host: mini.lumibib.ch
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+paths:
+  /oh:
+    parameters: []
+    get:
+      summary: Get current state
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                oh: Mo-Su; We closed
+                state: true
+                state_message: open
+                now_message: Ouvert
+                next_message: 'Nous allons peut-être fermer le 28 oct. 2020 00:00.'
+                unknown: false
+            properties:
+              oh:
+                type: string
+              state:
+                type: boolean
+              state_message:
+                type: string
+              now_message:
+                type: string
+              next_message:
+                type: string
+              unknown:
+                type: boolean
+          examples:
+            Example:
+              oh: Mo-Su; We closed
+              state: true
+              state_message: open
+              now_message: Ouvert
+              next_message: 'Nous allons peut-être fermer le 28 oct. 2020 00:00.'
+              unknown: false
+      operationId: get-oh
+      description: Retrieve the current state.
+      parameters:
+        - type: string
+          in: query
+          name: oh
+          required: true
+          description: 'opening_hours OSM key string. Ex. : `Mo-Su 08:00-12:00; We closed`'
+        - type: string
+          in: query
+          name: l
+          description: Language or locale
+          default: en
+  /oh/week:
+    get:
+      summary: Get week range
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                oh: Su
+                language: en
+                week:
+                  - date: '2021-07-11T22:00:00.000Z'
+                    date_string: 'Mon Jul 12 2021 00:00:00 GMT+0200 (GMT+02:00)'
+                    day_of_week_iso: '1'
+                    day_of_week: '1'
+                    day: lundi
+                    day_key: monday
+                    today: true
+                    hours: closed
+                    unknown_at_ten: false
+                    state_at_ten: false
+                week_is_stable: true
+                week_is_stable_message_en: ''
+            properties:
+              oh:
+                type: string
+              language:
+                type: string
+              week:
+                type: array
+                uniqueItems: true
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                    date_string:
+                      type: string
+                    day_of_week_iso:
+                      type: string
+                    day_of_week:
+                      type: string
+                    day:
+                      type: string
+                    day_key:
+                      type: string
+                    today:
+                      type: boolean
+                    hours:
+                      type: string
+                    unknown_at_ten:
+                      type: boolean
+                    state_at_ten:
+                      type: boolean
+              week_is_stable:
+                type: boolean
+              week_is_stable_message_en:
+                type: string
+          examples:
+            Example:
+              oh: Su
+              language: en
+              week:
+                - date: '2021-07-11T22:00:00.000Z'
+                  date_string: 'Mon Jul 12 2021 00:00:00 GMT+0200 (GMT+02:00)'
+                  day_of_week_iso: '1'
+                  day_of_week: '1'
+                  day: lundi
+                  day_key: monday
+                  today: true
+                  hours: closed
+                  unknown_at_ten: false
+                  state_at_ten: false
+              week_is_stable: true
+              week_is_stable_message_en: ''
+      operationId: get-oh-week
+      parameters:
+        - type: string
+          in: query
+          name: oh
+          required: true
+          description: 'opening_hours OSM key string. Ex.: `Mo-Su 08:00-12:00; We closed`'
+        - type: string
+          in: query
+          name: date
+          description: 'Date. Ex.: `2020-01-01`'
+        - type: string
+          in: query
+          name: l
+          default: en
+          description: Language or locale
+  /oh/month:
+    get:
+      summary: Get month range
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                oh: Su
+                language: en
+                month:
+                  - date: '2021-06-30T22:00:00.000Z'
+                    date_string: 'Thu Jul 01 2021 00:00:00 GMT+0200 (GMT+02:00)'
+                    day_of_week_iso: '4'
+                    day_of_week: '4'
+                    day_of_month: '1'
+                    day: Thursday
+                    day_key: thursday
+                    today: false
+                    hours: closed
+                    unknown_at_ten: false
+                    state_at_ten: false
+            properties:
+              oh:
+                type: string
+              language:
+                type: string
+              month:
+                type: array
+                uniqueItems: true
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date
+                    date_string:
+                      type: string
+                    day_of_week_iso:
+                      type: string
+                    day_of_week:
+                      type: string
+                    day_of_month:
+                      type: string
+                    day:
+                      type: string
+                    day_key:
+                      type: string
+                    today:
+                      type: boolean
+                    hours:
+                      type: string
+                    unknown_at_ten:
+                      type: boolean
+                    state_at_ten:
+                      type: boolean
+      operationId: get-oh-month
+      parameters:
+        - type: string
+          in: query
+          name: oh
+          required: true
+          description: 'opening_hours OSM key string. Ex.: `Mo-Su 08:00-12:00; We closed`'
+        - type: string
+          in: query
+          name: date
+          description: 'Date. Ex.: `2020-01-01`'
+        - type: string
+          in: query
+          name: l
+          default: en
+          description: Language or locale
+  /oh/interval:
+    get:
+      summary: Get opening times and closing times between two dates
+      tags: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                oh: 'Mo-Su 08:00-12:00; We closed'
+                language: fr
+                from: '2019-12-31T23:00:00.000Z'
+                to: '2020-01-31T23:00:00.000Z'
+                from_string: 'Wed Jan 01 2020 00:00:00 GMT+0100 (GMT+01:00)'
+                to_string: 'Sat Feb 01 2020 00:00:00 GMT+0100 (GMT+01:00)'
+                opening: []
+                closing: []
+                duration_hours:
+                  sure: 104
+                  maybe: 0
+                  message_en: 'For the given range, we are open for 104 hours'
+            properties:
+              oh:
+                type: string
+              language:
+                type: string
+              from:
+                type: string
+                format: date-time
+              to:
+                type: string
+                format: date-time
+              from_string:
+                type: string
+              to_string:
+                type: string
+              opening:
+                type: array
+                items:
+                  type: object
+              closing:
+                type: array
+                items:
+                  type: object
+              duration_hours:
+                type: object
+                properties:
+                  sure:
+                    type: number
+                  maybe:
+                    type: number
+                  message_en:
+                    type: string
+          examples:
+            Example:
+              oh: 'Mo-Su 08:00-12:00; We closed'
+              language: fr
+              from: '2019-12-31T23:00:00.000Z'
+              to: '2020-01-31T23:00:00.000Z'
+              from_string: 'Wed Jan 01 2020 00:00:00 GMT+0100 (GMT+01:00)'
+              to_string: 'Sat Feb 01 2020 00:00:00 GMT+0100 (GMT+01:00)'
+              opening: []
+              closing: []
+              duration_hours:
+                sure: 104
+                maybe: 0
+                message_en: 'For the given range, we are open for 104 hours'
+        '400':
+          description: Bad Request
+          schema:
+            description: ''
+            type: object
+            properties:
+              errors:
+                type: array
+                uniqueItems: true
+                minItems: 1
+                items:
+                  required:
+                    - title
+                    - detail
+                  properties:
+                    title:
+                      type: string
+                      minLength: 1
+                    detail:
+                      type: string
+                      minLength: 1
+            required:
+              - errors
+            x-examples:
+              example-1:
+                errors:
+                  - title: Error
+                    detail: Message
+          examples:
+            Example:
+              errors:
+                - title: Error
+                  detail: Message
+      operationId: get-oh-interval
+      parameters:
+        - type: string
+          in: query
+          name: oh
+          required: true
+          description: 'opening_hours OSM key string. Ex.: `Mo-Su 08:00-12:00; We closed`'
+        - type: string
+          in: query
+          name: from
+          description: 'Date. Ex.: `2020-01-01 00:00`'
+          required: true
+        - type: string
+          in: query
+          name: to
+          description: 'Date. Ex.: `2020-02-01 00:00`'
+          required: true
+        - type: string
+          in: query
+          name: l
+          default: en
+          description: Language or locale
+      description: Get opening times and closing times between two dates.
+definitions: {}
+basePath: /
