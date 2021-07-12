@@ -1,0 +1,140 @@
+openapi: 3.1.0
+info:
+  title: Classy
+  version: '1.0'
+  summary: Lumibib Classy REST API
+  description: Lumibib Classy REST API
+  contact:
+    name: Lumibib
+    email: support@lumibib.ch
+servers:
+  - url: 'https://demo.classy.lumibib.ch'
+    description: Demo instance
+  - url: 'https://ORG.classy.lumibib.ch'
+    description: Your organisation
+paths:
+  '/classifications/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Unique ID
+    get:
+      summary: Get Classification Info by ID
+      tags: []
+      responses:
+        '200':
+          description: Classification Found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Classification'
+              examples:
+                Get User Alice Smith:
+                  value:
+                    id: 142
+                    firstName: Alice
+                    lastName: Smith
+                    email: alice.smith@gmail.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    signUpDate: '2019-08-24'
+        '404':
+          description: User Not Found
+      operationId: get-classifications-id
+      description: Retrieve the information of the classification with the matching ID.
+      parameters:
+        - schema:
+            type: array
+          in: query
+          name: page
+  /classifications:
+    get:
+      summary: ''
+      operationId: get-classifications
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Classification'
+      description: Retrieve the information of all the organizations classifications.
+    parameters: []
+components:
+  schemas:
+    Classification:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          type: classifications
+          id: R8M4yx8BW0LlQZ
+          attributes:
+            name: Test
+            description: null
+            status: active
+            catalog_uri: null
+            codes:
+              - - '100'
+                - Label A fr
+                - Note A fr
+                - Comment A
+            data: null
+            createdAt: '2021-07-08T14:06:43.000000Z'
+            updatedAt: '2021-07-08T14:25:24.000000Z'
+          links:
+            self: 'http://test.classy.test/api/v1/classifications/R8M4yx8BW0LlQZ'
+      title: Classification
+      properties:
+        type:
+          type: string
+          enum:
+            - classifications
+        id:
+          type: string
+          example: AAAAAAAAAAAAAA
+        attributes:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              minLength: 1
+            description: {}
+            status:
+              type: string
+              minLength: 1
+            catalog_uri: {}
+            codes:
+              type: array
+              items:
+                type: object
+                properties:
+                  '0':
+                    type: array
+                    uniqueItems: true
+                    items:
+                      type: object
+            data: {}
+            createdAt:
+              type: string
+              minLength: 1
+            updatedAt:
+              type: string
+              minLength: 1
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              minLength: 1
+      required:
+        - type
+        - id
+        - attributes
+  securitySchemes: {}
