@@ -111,6 +111,26 @@ paths:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/sort'
+  '/sequentialprefixes/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Unique ID
+    get:
+      summary: Get Sequential Prefix by ID
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SequentialPrefix'
+      operationId: get-sequentialprefixes-id
+      description: Retrieve the sequential prefix with the matching ID.
 components:
   schemas:
     Classification:
