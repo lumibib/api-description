@@ -7,10 +7,11 @@ info:
   contact:
     name: Lumibib
     email: support@lumibib.ch
+  termsOfService: 'https://lumibib.ch/legal/terms'
 servers:
-  - url: 'https://demo.classy.lumibib.ch'
+  - url: 'https://demo.classy.lumibib.ch/api/v1'
     description: Demo instance
-  - url: 'https://ORG.classy.lumibib.ch'
+  - url: 'https://ORG.classy.lumibib.ch/api/v1'
     description: Your organisation
 paths:
   '/classifications/{id}':
@@ -38,23 +39,23 @@ paths:
                     id: K8lwg7bGxznj4e
                     attributes:
                       name: Classification A
-                      description: null
+                      description: Example A
                       status: active
-                      catalog_uri: null
+                      catalog_uri: 'https://example.com'
                       codes:
                         - - '100'
                           - Label A fr
                           - Note A fr
                           - Comment A
-                      data: null
+                      data: []
                       createdAt: '2021-07-11T11:31:02.000000Z'
                       updatedAt: '2021-07-11T11:31:02.000000Z'
                     links:
                       self: 'http://test.classy.test/api/v1/classifications/K8lwg7bGxznj4e'
         '404':
-          description: User Not Found
+          description: Classification Not Found
       operationId: get-classifications-id
-      description: Retrieve the information of the classification with the matching ID.
+      description: Retrieve the classification with the matching ID.
       parameters: []
   /classifications:
     get:
@@ -76,23 +77,40 @@ paths:
                     id: AAAAAAAAAAAAAA
                     attributes:
                       name: string
-                      description: null
+                      description: Example A
                       status: string
-                      catalog_uri: null
+                      catalog_uri: 'https://example.com'
                       codes:
                         - '0':
                             - {}
-                      data: null
-                      createdAt: string
-                      updatedAt: string
+                      data: []
+                      createdAt: '2021-06-22T14:17:08.000000Z'
+                      updatedAt: '2021-06-22T14:17:08.000000Z'
                     links:
                       self: string
-      description: Retrieve the information of all the organizations classifications.
+      description: Retrieve all classifications.
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/filter'
     parameters: []
+  /sequentialprefixes:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SequentialPrefix'
+      operationId: get-sequentialprefixes
+      description: Retrieve all sequential prefixes.
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/sort'
 components:
   schemas:
     Classification:
@@ -133,24 +151,97 @@ components:
           properties:
             name:
               type: string
-              minLength: 1
-            description: {}
+            description:
+              type: string
             status:
               type: string
-              minLength: 1
-            catalog_uri: {}
+            catalog_uri:
+              type: string
             codes:
               type: array
               items: {}
-            data: {}
+            data:
+              type: array
+              items: {}
             createdAt:
               type: string
-              minLength: 1
+              format: date-time
             updatedAt:
               type: string
-              minLength: 1
+              format: date-time
         links:
           type: object
+          properties:
+            self:
+              type: string
+      required:
+        - type
+        - id
+        - attributes
+    SequentialPrefix:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          type: sequentialprefixes
+          id: R8M4yx8BW0LlQZ
+          attributes:
+            prefix: ABC-
+            description: 'Ad Quam ob rem ut ii qui superiores sunt submittere se debent in amicitia, sic quodam modo inferiores extollere.'
+            status: active
+            first_code: 1
+            last_code: 100
+            code_incrementation: 1
+            desactivated_codes: null
+            last_code_added_datetime: '2021-04-15 12:00:00'
+            data: null
+            createdAt: null
+            updatedAt: '2021-07-08T14:36:49.000000Z'
+          links:
+            self: 'http://test.classy.test/api/v1/sequentialprefixes/R8M4yx8BW0LlQZ'
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+          example: AAAAAAAAAAAAAA
+        attributes:
+          type: object
+          required:
+            - prefix
+            - first_code
+            - last_code
+            - code_incrementation
+          properties:
+            prefix:
+              type: string
+            description:
+              type: string
+            status:
+              type: string
+            first_code:
+              type: number
+            last_code:
+              type: number
+            code_incrementation:
+              type: number
+            desactivated_codes:
+              type: string
+            last_code_added_datetime:
+              type: string
+            data:
+              type: array
+              items: {}
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+        links:
+          type: object
+          required:
+            - self
           properties:
             self:
               type: string
@@ -159,6 +250,7 @@ components:
         - type
         - id
         - attributes
+        - links
   securitySchemes: {}
   parameters:
     page:
@@ -184,5 +276,4 @@ components:
       schema:
         type: string
         example: name | -name
-        behavior: Read/Write
       description: The order in which resources are to be returning. Adding a ´-´ sort resourcesin the descending order.
