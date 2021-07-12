@@ -2,6 +2,10 @@ swagger: '2.0'
 info:
   title: Mini
   version: '1.0'
+  description: This API provides access to the Lumibib Mini service.
+  contact:
+    name: Lumibib
+    url: 'https://lumibib.ch/contact'
 host: mini.lumibib.ch
 schemes:
   - https
