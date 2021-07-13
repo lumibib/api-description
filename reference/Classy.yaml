@@ -2,7 +2,6 @@ openapi: 3.0.0
 info:
   title: Classy
   version: '1.0'
-  summary: Lumibib Classy REST API
   description: Lumibib Classy REST API
   contact:
     name: Lumibib
@@ -14,6 +13,58 @@ servers:
   - url: 'https://ORG.classy.lumibib.ch/api/v1'
     description: Your organisation
 paths:
+  /classifications:
+    get:
+      summary: Get Classifications
+      tags: []
+      operationId: get-classifications
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Classification'
+              examples:
+                example-1:
+                  value:
+                    type: classifications
+                    id: AAAAAAAAAAAAAA
+                    attributes:
+                      name: string
+                      description: Example A
+                      status: string
+                      catalog_uri: 'https://example.com'
+                      codes:
+                        - '0':
+                            - {}
+                      data: []
+                      createdAt: '2021-06-22T14:17:08.000000Z'
+                      updatedAt: '2021-06-22T14:17:08.000000Z'
+                    links:
+                      self: string
+      description: Retrieve all classifications.
+      parameters:
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
+        - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+            example: Lorem
+          in: query
+          name: 'filter[name]'
+          description: Allow to scope results on the `name` field.
+        - schema:
+            type: string
+            format: date
+            enum:
+              - active
+              - inactive
+          in: query
+          name: 'filter[status]'
+          description: Allow to scope results on the `status` field.
+    parameters: []
   '/classifications/{id}':
     parameters:
       - schema:
@@ -57,43 +108,6 @@ paths:
       operationId: get-classifications-id
       description: Retrieve the classification with the matching ID.
       parameters: []
-  /classifications:
-    get:
-      summary: Get Classifications
-      tags: []
-      operationId: get-classifications
-      responses:
-        '200':
-          description: OK
-          headers: {}
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Classification'
-              examples:
-                example-1:
-                  value:
-                    type: classifications
-                    id: AAAAAAAAAAAAAA
-                    attributes:
-                      name: string
-                      description: Example A
-                      status: string
-                      catalog_uri: 'https://example.com'
-                      codes:
-                        - '0':
-                            - {}
-                      data: []
-                      createdAt: '2021-06-22T14:17:08.000000Z'
-                      updatedAt: '2021-06-22T14:17:08.000000Z'
-                    links:
-                      self: string
-      description: Retrieve all classifications.
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/sort'
-        - $ref: '#/components/parameters/filter'
-    parameters: []
   /sequentialprefixes:
     get:
       summary: Get Sequential Prefixes
@@ -108,9 +122,25 @@ paths:
       operationId: get-sequentialprefixes
       description: Retrieve all sequential prefixes.
       parameters:
-        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/page_number'
+        - $ref: '#/components/parameters/page_size'
         - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/sort'
+        - schema:
+            type: string
+            example: AAAA-
+          in: query
+          name: 'filter[prefix]'
+          description: Allow to scope results on the `prefix` field.
+        - schema:
+            type: string
+            format: date
+            enum:
+              - active
+              - inactive
+          in: query
+          name: 'filter[status]'
+          description: Allow to scope results on the `status` field.
   '/sequentialprefixes/{id}':
     parameters:
       - schema:
@@ -273,22 +303,24 @@ components:
         - links
   securitySchemes: {}
   parameters:
-    page:
-      name: page
+    page_size:
+      name: 'page[size]'
       in: query
       required: false
       schema:
-        type: string
-        example: 'page[number]=2&page[size]=15'
-      description: Allow to return a subset of results. You have to use ´number and ´size parameters.
+        type: integer
+        example: 50
+        default: 25
+      description: Number of results per page.
+      allowEmptyValue: true
     filter:
-      name: filter
+      name: 'filter[<field>]'
       in: query
       required: false
       schema:
         type: string
         example: 'filter[name]=hello-world'
-      description: Allow to scope results based on a value.
+      description: Allow to scope results based on a field and value.
     sort:
       name: sort
       in: query
@@ -296,4 +328,14 @@ components:
       schema:
         type: string
         example: name | -name
-      description: The order in which resources are to be returning. Adding a ´-´ sort resourcesin the descending order.
+      description: The order in which resources are to be returning. Adding a ´-´ before the field sorts resources in the descending order.
+      allowEmptyValue: true
+      style: form
+    page_number:
+      name: 'page[number]'
+      in: query
+      required: false
+      schema:
+        type: integer
+      description: Return a subset of results.
+      allowEmptyValue: true
