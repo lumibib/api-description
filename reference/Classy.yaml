@@ -152,26 +152,8 @@ components:
       description: ''
       type: object
       x-examples:
-        Example A:
+        'Example A : Classifications':
           $ref: '#/components/examples/Classifications'
-        Example B:
-          value:
-            jsonapi:
-              version: string
-            data:
-              - type: string
-                id: string
-                attributes:
-                  name: string
-                  description: null
-                  status: string
-                  catalog_uri: null
-                  codes: []
-                  data: null
-                  createdAt: '2019-08-24T14:15:22Z'
-                  updatedAt: '2019-08-24T14:15:22Z'
-                links:
-                  self: 'http://example.com'
       properties:
         jsonapi:
           type: object
