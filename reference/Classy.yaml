@@ -199,14 +199,7 @@ components:
                   catalog_uri: {}
                   codes:
                     type: array
-                    items:
-                      type: object
-                      properties:
-                        '0':
-                          type: array
-                          uniqueItems: true
-                          items:
-                            type: object
+                    items: {}
                   data: {}
                   createdAt:
                     type: string
