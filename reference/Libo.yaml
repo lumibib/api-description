@@ -9,7 +9,7 @@ paths:
   /products:
     parameters: []
     get:
-      summary: Get User Info by User ID
+      summary: Get products
       tags: []
       responses:
         '200':
@@ -23,6 +23,39 @@ paths:
           description: Product Not Found
       operationId: get-users-userId
       description: Retrieve the information of the user with the matching user ID.
+  /events:
+    get:
+      summary: Get events
+      tags: []
+      responses: {}
+      operationId: get-events
+      parameters:
+        - schema:
+            type: string
+            example: fr
+          in: query
+          name: l
+          description: Locale
+        - schema:
+            type: string
+          in: query
+          name: 'filter[field]'
+          description: Filtering by field name
+          style: form
+        - schema:
+            type: string
+          in: query
+          name: sort
+          description: Sorting by field name
+        - schema:
+            type: string
+          in: query
+          name: page
+        - schema:
+            type: string
+          in: query
+          name: limit
+      x-internal: false
 components:
   schemas:
     Product:
