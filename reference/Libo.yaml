@@ -2,6 +2,12 @@ openapi: 3.0.0
 info:
   title: Libo
   version: '1.0'
+  contact:
+    name: Lumibib
+    url: 'https://lumibib.ch'
+    email: team@lumibib.ch
+  termsOfService: 'https://lumibib.ch/legal/terms'
+  description: Lumibib Libo REST API
 servers:
   - url: 'https://demo.libo.lumibib.ch/api/v1'
     description: Demo
@@ -22,12 +28,14 @@ paths:
         '404':
           description: Product Not Found
       operationId: get-users-userId
-      description: Retrieve the information of the user with the matching user ID.
+      description: Retrieve all products.
   /events:
     get:
       summary: Get events
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
       operationId: get-events
       parameters:
         - schema:
@@ -56,6 +64,7 @@ paths:
           in: query
           name: limit
       x-internal: false
+      description: Retrieve all events.
 components:
   schemas:
     Product:
