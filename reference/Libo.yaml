@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: Libo
+  version: '1.0'
+servers:
+  - url: 'https://demo.libo.lumibib.ch/api/v1'
+    description: Demo
+paths:
+  /products:
+    parameters: []
+    get:
+      summary: Get User Info by User ID
+      tags: []
+      responses:
+        '200':
+          description: Products Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              examples: {}
+        '404':
+          description: Product Not Found
+      operationId: get-users-userId
+      description: Retrieve the information of the user with the matching user ID.
+components:
+  schemas:
+    Product:
+      title: Product
+      type: object
+      properties:
+        id:
+          type: string

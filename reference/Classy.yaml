@@ -220,6 +220,7 @@ components:
               type: string
             last:
               type: string
+      title: ''
     SequentialPrefix:
       description: ''
       type: object
